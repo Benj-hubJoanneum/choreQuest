@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Chore Quest</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="item_title">Item Title</string>
+    <string name="date">Date</string>
+    <string name="assignee">Assignee</string>
+    <string name="chore_display">chore display</string>
+</resources>
