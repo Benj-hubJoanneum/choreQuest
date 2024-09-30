@@ -6,8 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     app:cardCornerRadius="20dp"
-    app:cardElevation="8dp"
-    app:cardBackgroundColor="@color/dark_green_dark2">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    app:cardBackgroundColor="@color/dark_green">
 
     <LinearLayout
     android:layout_width="match_parent"
@@ -15,7 +16,6 @@
     android:padding="8dp"
     android:orientation="horizontal"
     android:gravity="center_vertical">
-
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/item_icon"
@@ -25,6 +25,7 @@
             android:layout_marginEnd="16dp"
             android:src="@drawable/holzboden"
             android:scaleType="centerCrop"
+            android:elevation="5dp"
             app:shapeAppearanceOverlay="@style/CustomShapeImageView"/>
 
         <LinearLayout

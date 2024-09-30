@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="very_dark_blue">#0A1A29</color>
     <color name="dark_blue">#247BA0</color>
     <color name="light_blue">#4AB7E9</color>
     <color name="soft_blue">#8BD3F6</color>
+    <color name="very_dark_blue_light1">#233447</color>
+    <color name="very_dark_blue_light2">#3B4E64</color>
+
+
+
     <color name="turquoise">#42B6B8</color>
+
     <color name="light_green">#7ED38C</color>
+
     <color name="dark_green">#469D58</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#FF000000</color>
-    <color name="very_dark_blue">#0A1A29</color>
     <color name="dark_green_dark1">#3E8B4F</color>
     <color name="dark_green_dark2">#367844</color>
     <color name="dark_green_dark3">#2E653A</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
 
 </resources>
