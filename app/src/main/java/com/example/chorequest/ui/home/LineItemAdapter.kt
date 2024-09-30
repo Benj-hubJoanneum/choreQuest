@@ -28,4 +28,17 @@ class LineItemAdapter(private var items: List<LineItem>) :
         this.items = newItems
         notifyDataSetChanged()
     }
+
+    fun removeItem(position: Int) {
+        items = items.toMutableList().also {
+            it.removeAt(position)
+        }
+    }
+
+    fun addItem(position: Int, item: LineItem) {
+        items = items.toMutableList().also {
+            it.add(position, item)
+        }
+        notifyItemInserted(position)
+    }
 }
