@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chorequest.databinding.LineItemBinding
+import com.example.chorequest.model.LineItem
 
-data class LineItem(val title: String, val date: String, val assignee: String)
-
-class LineItemAdapter(private val items: List<LineItem>) :
+class LineItemAdapter(private var items: List<LineItem>) :
     RecyclerView.Adapter<LineItemAdapter.LineItemViewHolder>() {
 
     class LineItemViewHolder(val binding: LineItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -24,4 +23,9 @@ class LineItemAdapter(private val items: List<LineItem>) :
         holder.binding.itemAssignee.text = item.assignee
     }
     override fun getItemCount() = items.size
+
+    fun updateItems(newItems: List<LineItem>) {
+        this.items = newItems
+        notifyDataSetChanged()
+    }
 }
