@@ -9,9 +9,9 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/turquoise</item>
         <item name="colorSecondaryVariant">@color/light_green</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">?attr/colorPrimary</item>
 
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
     </style>
 </resources>

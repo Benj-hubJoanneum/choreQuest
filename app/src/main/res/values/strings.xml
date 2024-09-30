@@ -7,4 +7,5 @@
     <string name="TODO_list">TODO list</string>
     <string name="ADD">Add</string>
     <string name="ALL_chores">All Chores</string>
+    <string name="chore_quest">Chore Quest</string>
 </resources>
