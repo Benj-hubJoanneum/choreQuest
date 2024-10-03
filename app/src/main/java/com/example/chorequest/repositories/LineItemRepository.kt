@@ -23,11 +23,25 @@ class LineItemRepository {
         return when (uuid) {
             "1" -> listOf(
                 LineItem("1", "Orchideen gießen", "2024-09-02", "Anna"),
-                LineItem("1", "Orchideen gießen", "2024-08-02", "Tom")
+                LineItem("1", "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.", "2024-08-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2024-07-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2024-06-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2024-05-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2024-04-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2024-03-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2024-02-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2024-01-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2023-12-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2023-11-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2023-10-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2023-09-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2023-08-02", "Tom"),
+                LineItem("1", "Orchideen gießen", "2023-07-02", "Anna"),
+                LineItem("1", "Orchideen gießen", "2023-06-02", "Tom"),
             )
             "2" -> listOf(
-                LineItem("2", "Boden wischen", "2024-09-02", "Tom"),
-                LineItem("2", "Boden wischen", "2024-08-02", "Anna")
+                LineItem("2", "Boden wischen", "2023-09-02", "Tom"),
+                LineItem("2", "Boden wischen", "2023-08-02", "Anna")
             )
             else -> emptyList()
         }

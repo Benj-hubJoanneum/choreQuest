@@ -2,6 +2,8 @@ package com.example.chorequest.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chorequest.databinding.FragmentDialogLineitemListBinding
@@ -41,9 +43,15 @@ class LineItemsListDialogFragment : DialogFragment() {
             }
         }
 
+        binding.root.setOnClickListener {
+            dismiss()
+        }
+
         return Dialog(requireContext()).apply {
             setContentView(binding.root)
             setCancelable(true)
+            window?.setGravity(Gravity.TOP)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
         }
     }
 
