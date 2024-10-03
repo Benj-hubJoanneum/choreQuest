@@ -1,27 +1,27 @@
-package com.example.chorequest
+package com.example.chorequest.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.chorequest.databinding.FragmentSimpleDialogBinding
+import com.example.chorequest.databinding.FragmentDialogLineitemListBinding
 import com.example.chorequest.model.LineItem
 import com.example.chorequest.repositories.LineItemRepository
-import com.example.chorequest.ui.lineItem.LineItemAdapter
+import com.example.chorequest.ui.Adapter.LineItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SimpleDialogFragment : DialogFragment() {
+class LineItemsListDialogFragment : DialogFragment() {
 
-    private var _binding: FragmentSimpleDialogBinding? = null
+    private var _binding: FragmentDialogLineitemListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: LineItemAdapter
     private val repository = LineItemRepository()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = FragmentSimpleDialogBinding.inflate(layoutInflater)
+        _binding = FragmentDialogLineitemListBinding.inflate(layoutInflater)
 
         // Initialize RecyclerView
         adapter = LineItemAdapter(emptyList()) { uuid ->
@@ -59,8 +59,8 @@ class SimpleDialogFragment : DialogFragment() {
 
     companion object {
         // Pass UUID to the dialog when creating an instance
-        fun newInstance(uuid: String): SimpleDialogFragment {
-            val dialog = SimpleDialogFragment()
+        fun newInstance(uuid: String): LineItemsListDialogFragment {
+            val dialog = LineItemsListDialogFragment()
             val args = Bundle().apply {
                 putString("uuid", uuid)
             }

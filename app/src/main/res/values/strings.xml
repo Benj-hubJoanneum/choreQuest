@@ -8,4 +8,5 @@
     <string name="ADD">Add</string>
     <string name="ALL_chores">All Chores</string>
     <string name="chore_quest">Chore Quest</string>
+    <string name="item_history">Item History</string>
 </resources>

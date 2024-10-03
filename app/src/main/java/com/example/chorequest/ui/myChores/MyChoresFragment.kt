@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chorequest.SimpleDialogFragment
+import com.example.chorequest.ui.dialog.LineItemsListDialogFragment
 import com.example.chorequest.databinding.FragmentMychoresBinding
 import com.example.chorequest.repositories.LineItemRepository
-import com.example.chorequest.ui.lineItem.LineItemAdapter
+import com.example.chorequest.ui.Adapter.LineItemAdapter
 import com.google.android.material.snackbar.Snackbar
 
 class MyChoresFragment : Fragment() {
@@ -40,7 +40,7 @@ class MyChoresFragment : Fragment() {
 
         // Handle item clicks, passing the uuid to the dialog
         adapter = LineItemAdapter(emptyList()) { uuid ->
-            val dialog = SimpleDialogFragment.newInstance(uuid)
+            val dialog = LineItemsListDialogFragment.newInstance(uuid)
             dialog.show(parentFragmentManager, "SimpleDialogFragment")
         }
         recyclerView.adapter = adapter
