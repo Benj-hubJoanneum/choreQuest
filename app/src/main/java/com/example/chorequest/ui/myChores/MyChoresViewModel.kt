@@ -1,4 +1,4 @@
-package com.example.chorequest.ui.home
+package com.example.chorequest.ui.myChores
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.example.chorequest.model.LineItem
 import com.example.chorequest.repositories.LineItemRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val repository: LineItemRepository) : ViewModel() {
+class MyChoresViewModel(private val repository: LineItemRepository) : ViewModel() {
 
     private val _lineItems = MutableLiveData<List<LineItem>>()
     val lineItems: LiveData<List<LineItem>> get() = _lineItems

@@ -1,4 +1,4 @@
-package com.example.chorequest.ui.home
+package com.example.chorequest.ui.myChores
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,16 +9,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chorequest.databinding.FragmentHomeBinding
+import com.example.chorequest.databinding.FragmentMychoresBinding
 import com.example.chorequest.repositories.LineItemRepository
+import com.example.chorequest.ui.lineItem.LineItemAdapter
 import com.google.android.material.snackbar.Snackbar
 
-class HomeFragment : Fragment() {
+class MyChoresFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentMychoresBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var myChoresViewModel: MyChoresViewModel
     private lateinit var adapter: LineItemAdapter
 
     override fun onCreateView(
@@ -26,12 +27,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMychoresBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         // Initialize ViewModel
         val repository = LineItemRepository()
-        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(repository))[HomeViewModel::class.java]
+        myChoresViewModel = ViewModelProvider(this, MyChoresViewModelFactory(repository))[MyChoresViewModel::class.java]
 
         // Set up RecyclerView
         val recyclerView = binding.recyclerView
@@ -40,12 +41,12 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
 
         // Observe data from ViewModel
-        homeViewModel.lineItems.observe(viewLifecycleOwner) { items ->
+        myChoresViewModel.lineItems.observe(viewLifecycleOwner) { items ->
             adapter.updateItems(items)
         }
 
         // Fetch data from server
-        homeViewModel.fetchLineItems()
+        myChoresViewModel.fetchLineItems()
 
         // Set up swipe-to-remove functionality
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {

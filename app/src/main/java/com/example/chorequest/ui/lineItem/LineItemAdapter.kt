@@ -1,5 +1,6 @@
-package com.example.chorequest.ui.home
+package com.example.chorequest.ui.lineItem
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class LineItemAdapter(private var items: List<LineItem>) :
     }
     override fun getItemCount() = items.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateItems(newItems: List<LineItem>) {
         this.items = newItems
         notifyDataSetChanged()
@@ -33,6 +35,8 @@ class LineItemAdapter(private var items: List<LineItem>) :
         items = items.toMutableList().also {
             it.removeAt(position)
         }
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, items.size)
     }
 
     fun addItem(position: Int, item: LineItem) {
