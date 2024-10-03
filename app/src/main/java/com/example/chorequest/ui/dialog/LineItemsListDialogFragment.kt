@@ -37,7 +37,7 @@ class LineItemsListDialogFragment : DialogFragment() {
 
         // Fetch history based on the UUID in a coroutine
         CoroutineScope(Dispatchers.Main).launch {
-            val history = repository.getLineItemHistoryById(uuid)
+            val history = emptyList<LineItem>() //repository.getLineItemHistoryById(uuid)
             if (history != null) {
                 updateRecyclerView(history)
             }

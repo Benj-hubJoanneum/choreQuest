@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chorequest.databinding.LineItemBinding
 import com.example.chorequest.model.LineItem
+import java.util.UUID
 
 class LineItemAdapter(
     private var items: List<LineItem>,
