@@ -28,16 +28,20 @@ class MyChoresFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMychoresBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
         // Initialize ViewModel
         val repository = LineItemRepository()
         myChoresViewModel = ViewModelProvider(this, MyChoresViewModelFactory(repository))[MyChoresViewModel::class.java]
 
-        // Set up RecyclerView
+        // Set up RecyclerView for the list of chores (LineItemAdapter)
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = LineItemAdapter(emptyList()) // Initially empty
+
+        // Handle item clicks, passing the uuid to the dialog
+        adapter = LineItemAdapter(emptyList()) { uuid ->
+            val dialog = SimpleDialogFragment.newInstance()
+            dialog.show(parentFragmentManager, "SimpleDialogFragment")
+        }
         recyclerView.adapter = adapter
 
         // Observe data from ViewModel
@@ -55,22 +59,21 @@ class MyChoresFragment : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false // We are not moving items up and down, so return false.
+                return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-
                 adapter.removeItem(position)
 
                 // Show Snackbar with Undo option
-                Snackbar.make(binding.recyclerView, "Item removed", Snackbar.LENGTH_LONG)
-                    .show()
+                Snackbar.make(binding.recyclerView, "Item removed", Snackbar.LENGTH_LONG).show()
             }
+
         })
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {

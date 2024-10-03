@@ -16,7 +16,7 @@ class MyChoresViewModel(private val repository: LineItemRepository) : ViewModel(
     fun fetchLineItems() {
         viewModelScope.launch {
             val items = repository.getLineItems()
-            _lineItems.postValue(items!!)
+            _lineItems.postValue(items ?: emptyList())
         }
     }
 }

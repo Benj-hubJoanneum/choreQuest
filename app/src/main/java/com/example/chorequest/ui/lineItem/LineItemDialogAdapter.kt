@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chorequest.databinding.LineItemBinding
 import com.example.chorequest.model.LineItem
 
-class LineItemAdapter(
-    private var items: List<LineItem>,
-    private val onItemClicked: (String) -> Unit // Click listener
-) : RecyclerView.Adapter<LineItemAdapter.LineItemViewHolder>() {
+class LineItemDialogAdapter(
+    private var items: List<LineItem>
+) : RecyclerView.Adapter<LineItemDialogAdapter.LineItemViewHolder>() {
 
     class LineItemViewHolder(val binding: LineItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineItemViewHolder {
-        val binding = LineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = LineItemBinding.inflate(inflater, parent, false)
         return LineItemViewHolder(binding)
     }
 
@@ -23,13 +23,7 @@ class LineItemAdapter(
         val item = items[position]
         holder.binding.lineItem = item
         holder.binding.executePendingBindings()
-
-        // Handle item click
-        holder.itemView.setOnClickListener {
-            onItemClicked(item.uuid)
-        }
     }
-
 
     override fun getItemCount() = items.size
 
@@ -37,20 +31,5 @@ class LineItemAdapter(
     fun updateItems(newItems: List<LineItem>) {
         this.items = newItems
         notifyDataSetChanged()
-    }
-
-    fun removeItem(position: Int) {
-        items = items.toMutableList().also {
-            it.removeAt(position)
-        }
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, items.size)
-    }
-
-    fun addItem(position: Int, item: LineItem) {
-        items = items.toMutableList().also {
-            it.add(position, item)
-        }
-        notifyItemInserted(position)
     }
 }

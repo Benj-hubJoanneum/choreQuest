@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_add"
-        android:name="com.example.chorequest.ui.addLineItem.AddLineItemFragment"
+        android:name="com.example.chorequest.ui.addLineItem.AddLineItemDialogFragment"
         android:label="Add"
         tools:layout="@layout/fragment_addlineitem" />
 
