@@ -33,6 +33,8 @@ class LineItemAdapter(private var items: List<LineItem>) :
         items = items.toMutableList().also {
             it.removeAt(position)
         }
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, items.size)
     }
 
     fun addItem(position: Int, item: LineItem) {
