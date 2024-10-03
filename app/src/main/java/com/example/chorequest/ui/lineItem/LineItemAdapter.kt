@@ -10,19 +10,22 @@ import com.example.chorequest.model.LineItem
 class LineItemAdapter(private var items: List<LineItem>) :
     RecyclerView.Adapter<LineItemAdapter.LineItemViewHolder>() {
 
+    // ViewHolder that binds the LineItemBinding
     class LineItemViewHolder(val binding: LineItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineItemViewHolder {
-        val binding = LineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        // Inflate the binding layout
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = LineItemBinding.inflate(inflater, parent, false)
         return LineItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: LineItemViewHolder, position: Int) {
         val item = items[position]
-        holder.binding.itemTitle.text = item.title
-        holder.binding.itemDate.text = item.date
-        holder.binding.itemAssignee.text = item.assignee
+        holder.binding.lineItem = item
+        holder.binding.executePendingBindings()
     }
+
     override fun getItemCount() = items.size
 
     @SuppressLint("NotifyDataSetChanged")

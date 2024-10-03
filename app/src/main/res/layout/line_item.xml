@@ -1,65 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    app:cardCornerRadius="20dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    app:cardBackgroundColor="@color/dark_green_dark1">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    <data>
+        <variable
+            name="lineItem"
+            type="com.example.chorequest.model.LineItem" />
+    </data>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/item_icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/chore_display"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/holzboden"
-            android:scaleType="centerCrop"
-            android:elevation="5dp"
-            app:shapeAppearanceOverlay="@style/CustomShapeImageView"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="20dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:cardBackgroundColor="@color/dark_green_dark1">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:padding="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/item_title"
-                android:layout_width="wrap_content"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/item_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:contentDescription="@string/chore_display"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/holzboden"
+                android:scaleType="centerCrop"
+                android:elevation="5dp"
+                app:shapeAppearanceOverlay="@style/CustomShapeImageView"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/item_title"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/very_dark_blue" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/item_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/date"
-                android:textSize="12sp"
-                android:textColor="@color/very_dark_blue" />
+                <!-- Bind the title directly from the LineItem object -->
+                <TextView
+                    android:id="@+id/item_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{lineItem.title}"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/very_dark_blue" />
 
-            <TextView
-                android:id="@+id/item_assignee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/assignee"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/very_dark_blue" />
+                <!-- Bind the date directly from the LineItem object -->
+                <TextView
+                    android:id="@+id/item_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{lineItem.date}"
+                    android:textSize="12sp"
+                    android:textColor="@color/very_dark_blue" />
 
+                <!-- Bind the assignee directly from the LineItem object -->
+                <TextView
+                    android:id="@+id/item_assignee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{lineItem.assignee}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/very_dark_blue" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>
