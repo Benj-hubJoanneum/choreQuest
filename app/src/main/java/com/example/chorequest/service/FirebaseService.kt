@@ -1,3 +1,4 @@
+/*
 package com.example.chorequest.service
 
 import com.example.chorequest.model.Group
@@ -37,3 +38,4 @@ class FirebaseService {
             .update("groups", FieldValue.arrayUnion(groupId)).await()
     }
 }
+*/
