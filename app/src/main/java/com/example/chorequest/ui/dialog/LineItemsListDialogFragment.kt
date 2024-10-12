@@ -26,7 +26,7 @@ class LineItemsListDialogFragment : DialogFragment() {
         _binding = FragmentDialogLineitemListBinding.inflate(layoutInflater)
 
         // Initialize RecyclerView
-        adapter = LineItemAdapter(emptyList()) { uuid ->
+        adapter = LineItemAdapter(emptyList()) {
             // No action needed for dialog as no item click handling here
         }
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
