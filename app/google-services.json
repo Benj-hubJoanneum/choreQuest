@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "790364982683",
+    "project_id": "chore-quest-fbb37",
+    "storage_bucket": "chore-quest-fbb37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790364982683:android:bbd96f950b437ac72a653e",
+        "android_client_info": {
+          "package_name": "com.example.chorequest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtPWBjnRfqy8xdhis189yOxo2v0hNb0WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

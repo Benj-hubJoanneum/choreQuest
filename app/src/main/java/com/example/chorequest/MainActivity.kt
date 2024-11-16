@@ -10,21 +10,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.chorequest.databinding.ActivityMainBinding
-import com.example.chorequest.model.Group
-import com.example.chorequest.model.LineItem
-import com.example.chorequest.model.User
 import com.example.chorequest.service.FireStoreService
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
-import com.google.firebase.analytics.logEvent
-import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.FirebaseStorage
+import com.example.chorequest.service.server.OpenStackService
 import kotlinx.coroutines.runBlocking
-import java.util.UUID
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val fireStoreService = FireStoreService()
+    private val serverService = OpenStackService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +29,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_mychores, R.id.navigation_add, R.id.navigation_all
@@ -46,9 +38,17 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         supportActionBar?.hide()
+
+        // Fetch data from Firestore
         fetchDataFromFirestore()
+
+        // Fetch data from the Python server
+        fetchDataFromServer()
     }
-    private val fireStoreService = FireStoreService()
+
+    /**
+     * Fetch data from Firestore
+     */
     private fun fetchDataFromFirestore() {
         runBlocking {
             try {
@@ -59,11 +59,47 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "Fetched Users: $users")
                 Log.d(TAG, "Fetched Groups: $groups")
                 Log.d(TAG, "Fetched Line Items: $lineItems")
-
-                // Process the data as needed
-                // You can store them in a ViewModel or pass to UI components
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching data from Firestore", e)
+            }
+        }
+    }
+
+    /**
+     * Fetch data from the Python server
+     */
+    private fun fetchDataFromServer() {
+        runBlocking {
+            try {
+
+
+                // Example of saving data to the server
+                val userJson = JSONObject()
+                userJson.put("id", "0066")
+                userJson.put("name", "Jane Doe")
+                userJson.put("email", "janedoe@example.com")
+
+                /*serverService.saveDataById("0066", userJson) { success ->
+                    if (success) {
+                        Log.d(TAG, "Successfully saved data to server")
+                    } else {
+                        Log.e(TAG, "Failed to save data to server")
+                    }
+                }*/
+
+
+                // Fetch data with another ID for testing
+                serverService.fetchDataById("0066") { response ->
+                    response?.let {
+                        Log.d(TAG, "Fetched Data from Server: $it")
+                    } ?: run {
+                        Log.e(TAG, "No response from server for ID 0045")
+                    }
+                }
+
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error communicating with server", e)
             }
         }
     }
