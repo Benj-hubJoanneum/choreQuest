@@ -21,15 +21,17 @@ class LineItemsListDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: LineItemAdapter
-    private val fireStoreService = FireStoreService() // Initialize here
+    private val fireStoreService = FireStoreService() // Initialize Firestore service
     private val repository = LineItemRepository(fireStoreService)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentDialogLineitemListBinding.inflate(layoutInflater)
 
         // Initialize RecyclerView
-        adapter = LineItemAdapter(emptyList()) {
-            // No action needed for dialog as no item click handling here
+        adapter = LineItemAdapter(emptyList()) { uuid ->
+            // On click, show another dialog for the clicked LineItem's references
+            val dialog = newInstance(uuid)
+            dialog.show(parentFragmentManager, "NestedLineItemDialog")
         }
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.historyRecyclerView.adapter = adapter
@@ -37,11 +39,11 @@ class LineItemsListDialogFragment : DialogFragment() {
         // Retrieve UUID passed from MyChoresFragment
         val uuid = arguments?.getString("uuid") ?: return super.onCreateDialog(savedInstanceState)
 
-        // Fetch history based on the UUID in a coroutine
+        // Fetch LineItem references based on the UUID
         CoroutineScope(Dispatchers.Main).launch {
-            val history = repository.getLineItemHistoryById(uuid)
-            if (history != null) {
-                updateRecyclerView(history)
+            val lineItems = fetchReferencedLineItems(uuid)
+            if (lineItems != null) {
+                updateRecyclerView(lineItems)
             }
         }
 
@@ -57,9 +59,22 @@ class LineItemsListDialogFragment : DialogFragment() {
         }
     }
 
-    // Update the RecyclerView with the fetched history
-    private fun updateRecyclerView(history: List<LineItem>) {
-        adapter.updateItems(history)
+    /**
+     * Fetch referenced LineItems recursively based on the UUID.
+     */
+    private suspend fun fetchReferencedLineItems(uuid: String): List<LineItem>? {
+        val lineItems =
+            repository.getHistoryByLineItemID(uuid) ?: return null // Fetch the main LineItem
+
+        // Return the main LineItem and its references as a combined list
+        return lineItems
+    }
+
+    /**
+     * Update the RecyclerView with the fetched LineItems.
+     */
+    private fun updateRecyclerView(lineItems: List<LineItem>) {
+        adapter.updateItems(lineItems)
     }
 
     override fun onDestroyView() {
@@ -79,4 +94,5 @@ class LineItemsListDialogFragment : DialogFragment() {
         }
     }
 }
+
 

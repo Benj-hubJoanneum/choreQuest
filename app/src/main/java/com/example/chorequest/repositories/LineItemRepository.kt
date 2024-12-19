@@ -5,11 +5,26 @@ import com.example.chorequest.service.FireStoreService
 
 class LineItemRepository(private val fireStoreService: FireStoreService) {
 
-    suspend fun getLineItemsForGroup(groupId: String): List<LineItem>? {
+    suspend fun getLineItemsForGroup(groupID: String): List<LineItem>? {
         return try {
-            val group = fireStoreService.getGroupByID(groupId)
-            group?.lineItems?.mapNotNull { lineItemId ->
-                fireStoreService.getLineItemByID(lineItemId)?.let { lineItem ->
+            val group = fireStoreService.getGroupByID(groupID)
+            group?.lineItems?.mapNotNull { lineItemID ->
+                fireStoreService.getLineItemByID(lineItemID)?.let { lineItem ->
+                    // Replace assignee UUID with user name
+                    val userName = fireStoreService.getUsersByID(lineItem.assignee)?.name ?: "Unknown"
+                    lineItem.copy(assignee = userName)
+                }
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getHistoryByLineItemID(lineItemID: String): List<LineItem>? {
+        return try {
+            val lineItem = fireStoreService.getLineItemByID(lineItemID)
+            lineItem?.lineItems?.mapNotNull { lineItemID ->
+                fireStoreService.getLineItemByID(lineItemID)?.let { lineItem ->
                     // Replace assignee UUID with user name
                     val userName = fireStoreService.getUsersByID(lineItem.assignee)?.name ?: "Unknown"
                     lineItem.copy(assignee = userName)
