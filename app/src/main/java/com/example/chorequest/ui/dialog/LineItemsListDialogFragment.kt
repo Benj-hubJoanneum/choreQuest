@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chorequest.databinding.FragmentDialogLineitemListBinding
 import com.example.chorequest.model.LineItem
 import com.example.chorequest.repositories.LineItemRepository
+import com.example.chorequest.service.FireStoreService
 import com.example.chorequest.ui.Adapter.LineItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,8 @@ class LineItemsListDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: LineItemAdapter
-    private val repository = LineItemRepository()
+    private val fireStoreService = FireStoreService() // Initialize here
+    private val repository = LineItemRepository(fireStoreService)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentDialogLineitemListBinding.inflate(layoutInflater)
@@ -77,3 +79,4 @@ class LineItemsListDialogFragment : DialogFragment() {
         }
     }
 }
+
