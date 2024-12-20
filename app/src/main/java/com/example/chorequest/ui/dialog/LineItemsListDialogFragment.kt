@@ -3,13 +3,12 @@ package com.example.chorequest.ui.dialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.Gravity
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chorequest.databinding.FragmentDialogLineitemListBinding
 import com.example.chorequest.model.LineItem
 import com.example.chorequest.repositories.LineItemRepository
-import com.example.chorequest.ui.Adapter.LineItemAdapter
+import com.example.chorequest.ui.adapter.LineItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

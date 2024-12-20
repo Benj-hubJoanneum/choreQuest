@@ -1,9 +1,11 @@
-package com.example.chorequest.ui.Adapter
+package com.example.chorequest.ui.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.chorequest.R
 import com.example.chorequest.databinding.LineItemBinding
 import com.example.chorequest.model.LineItem
 
@@ -22,6 +24,16 @@ class LineItemAdapter(
     override fun onBindViewHolder(holder: LineItemViewHolder, position: Int) {
         val item = items[position]
         holder.binding.lineItem = item
+
+
+        android.util.Log.d("LineItemAdapter", "Loading image URL: $item.imageUrl")
+
+        Glide.with(holder.itemView.context)
+            .load(item.imageUrl)
+            .placeholder(R.drawable.placeholder)
+            .error(R.drawable.placeholder)
+            .into(holder.binding.itemIcon)
+
         holder.binding.executePendingBindings()
 
         // Handle item click
@@ -29,7 +41,6 @@ class LineItemAdapter(
             onItemClicked(item.uuid)
         }
     }
-
 
     override fun getItemCount() = items.size
 

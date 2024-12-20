@@ -6,13 +6,14 @@ class LineItemRepository {
 
     suspend fun getLineItems(): List<LineItem>? {
         return listOf(
-            LineItem("1", "Orchideen gießen", "2024-10-02", "Anna"),
-            LineItem("2", "Boden wischen", "2024-09-30", "Tom"),
+            LineItem("1", "Orchideen gießen", "2024-10-02", "Anna", imageUrl = "https://yt3.googleusercontent.com/K8WVrQAQHTTwsHEtisMYcNai7p7XIlyEAdZg86qYw78ye57r5DRemHQ9Te4PcD_v98HB-ZvQjQ=s900-c-k-c0x00ffffff-no-rj"),
+            LineItem("2", "Boden wischen", "2024-09-30", "Tom", imageUrl =  "https://yt3.googleusercontent.com/K8WVrQAQHTTwsHEtisMYcNai7p7XIlyEAdZg86qYw78ye57r5DRemHQ9Te4PcD_v98HB-ZvQjQ=s900-c-k-c0x00ffffff-no-rj"),
             LineItem(
                 "3",
                 "Meet local King",
                 "2024-10-01",
-                "Hello. My name is Inigo Montoya. You killed my father. Prepare to die"
+                "Hello. My name is Inigo Montoya. You killed my father. Prepare to die",
+                imageUrl = "https://yt3.googleusercontent.com/K8WVrQAQHTTwsHEtisMYcNai7p7XIlyEAdZg86qYw78ye57r5DRemHQ9Te4PcD_v98HB-ZvQjQ=s900-c-k-c0x00ffffff-no-rj"
             )
         )
     }

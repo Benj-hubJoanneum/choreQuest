@@ -5,5 +5,6 @@ data class LineItem(
     val title: String = "",
     val date: String = "",
     val assignee: String = "",
-    val lineItems: List<String> = listOf()
+    val lineItems: List<String> = listOf(),
+    val imageUrl: String = "",
 )

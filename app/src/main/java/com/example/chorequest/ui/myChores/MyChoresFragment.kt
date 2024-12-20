@@ -1,5 +1,9 @@
 package com.example.chorequest.ui.myChores
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chorequest.ui.dialog.LineItemsListDialogFragment
 import com.example.chorequest.databinding.FragmentMychoresBinding
+import com.example.chorequest.repositories.ImageRepository
 import com.example.chorequest.repositories.LineItemRepository
-import com.example.chorequest.ui.Adapter.LineItemAdapter
+import com.example.chorequest.ui.adapter.LineItemAdapter
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import java.io.File
+import java.io.FileOutputStream
 
 class MyChoresFragment : Fragment() {
 
@@ -31,8 +39,9 @@ class MyChoresFragment : Fragment() {
         _binding = FragmentMychoresBinding.inflate(inflater, container, false)
 
         // Initialize ViewModel
+        val imageRepository = ImageRepository()
         val repository = LineItemRepository()
-        myChoresViewModel = ViewModelProvider(this, MyChoresViewModelFactory(repository))[MyChoresViewModel::class.java]
+        myChoresViewModel = ViewModelProvider(this, MyChoresViewModelFactory(repository, imageRepository))[MyChoresViewModel::class.java]
 
         // Set up RecyclerView for the list of chores (LineItemAdapter)
         val recyclerView = binding.recyclerView
@@ -52,6 +61,7 @@ class MyChoresFragment : Fragment() {
 
         // Fetch data from server
         myChoresViewModel.fetchLineItems()
+        testImageUpload()
 
         // Set up swipe-to-remove functionality
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -75,6 +85,24 @@ class MyChoresFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         return binding.root
+    }
+
+    private fun testImageUpload() {
+        val bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888) // 100x100px white image
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.color = Color.WHITE
+        canvas.drawRect(0f, 0f, 100f, 100f, paint)
+
+        val file = File(requireContext().cacheDir, "test_image.png")
+        val outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.close()
+
+        val requestBody = okhttp3.RequestBody.create("image/png".toMediaTypeOrNull(), file)
+        val imagePart = okhttp3.MultipartBody.Part.createFormData("image", file.name, requestBody)
+
+        myChoresViewModel.uploadImage(imagePart)
     }
 
     override fun onDestroyView() {
