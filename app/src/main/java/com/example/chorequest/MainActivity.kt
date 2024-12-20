@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val bundle = Bundle().apply {
+            putString("GROUP_ID", "6CL3twvvJP0AoNvPMVoT") // Replace with actual group ID
+        }
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_mychores, R.id.navigation_add, R.id.navigation_all
@@ -40,10 +43,10 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // Fetch data from Firestore
-        fetchDataFromFirestore()
+        // fetchDataFromFirestore()
 
         // Fetch data from the Python server
-        fetchDataFromServer()
+        // fetchDataFromServer()
     }
 
     /**
@@ -52,13 +55,11 @@ class MainActivity : AppCompatActivity() {
     private fun fetchDataFromFirestore() {
         runBlocking {
             try {
-                val users = fireStoreService.getUsers()
-                val groups = fireStoreService.getGroups()
-                val lineItems = fireStoreService.getLineItems()
+                val anna = fireStoreService.getUsersByID("AyQrw9UMDn10irljeoC4") // brauch ma
+                val group = fireStoreService.getGroupByID("6CL3twvvJP0AoNvPMVoT") // brauch ma
+                val lineitem = group?.lineItems?.first()
+                    ?.let { fireStoreService.getLineItemByID(it) }
 
-                Log.d(TAG, "Fetched Users: $users")
-                Log.d(TAG, "Fetched Groups: $groups")
-                Log.d(TAG, "Fetched Line Items: $lineItems")
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching data from Firestore", e)
             }

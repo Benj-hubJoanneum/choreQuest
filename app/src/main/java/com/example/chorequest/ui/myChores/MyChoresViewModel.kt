@@ -22,17 +22,13 @@ class MyChoresViewModel(
     private val _lineItems = MutableLiveData<List<LineItem>>()
     val lineItems: LiveData<List<LineItem>> get() = _lineItems
 
-    fun fetchLineItems() {
+    fun fetchLineItemsForGroup(groupId: String) {
         viewModelScope.launch {
-            try {
-                val items = repository.getLineItems()
-                _lineItems.postValue(items ?: emptyList())
-
-            } catch (e: Exception) {
-                _lineItems.postValue(emptyList())
-            }
+            val items = repository.getLineItemsForGroup(groupId)
+            _lineItems.postValue(items ?: emptyList())
         }
     }
+}
 
     fun uploadImage(imagePart: MultipartBody.Part) {
         viewModelScope.launch {

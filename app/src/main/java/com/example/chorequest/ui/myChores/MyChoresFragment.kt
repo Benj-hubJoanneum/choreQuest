@@ -18,6 +18,7 @@ import com.example.chorequest.databinding.FragmentMychoresBinding
 import com.example.chorequest.repositories.ImageRepository
 import com.example.chorequest.repositories.LineItemRepository
 import com.example.chorequest.ui.adapter.LineItemAdapter
+import com.example.chorequest.service.FireStoreService
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
@@ -40,14 +41,18 @@ class MyChoresFragment : Fragment() {
 
         // Initialize ViewModel
         val imageRepository = ImageRepository()
-        val repository = LineItemRepository()
-        myChoresViewModel = ViewModelProvider(this, MyChoresViewModelFactory(repository, imageRepository))[MyChoresViewModel::class.java]
+        val fireStoreService = FireStoreService()
+        val repository = LineItemRepository(fireStoreService)
+        myChoresViewModel = ViewModelProvider(
+            this,
+            MyChoresViewModelFactory(repository)
+        )[MyChoresViewModel::class.java]
 
-        // Set up RecyclerView for the list of chores (LineItemAdapter)
+        // Set up RecyclerView
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Handle item clicks, passing the uuid to the dialog
+        // Adapter setup
         adapter = LineItemAdapter(emptyList()) { uuid ->
             val dialog = LineItemsListDialogFragment.newInstance(uuid)
             dialog.show(parentFragmentManager, "SimpleDialogFragment")
@@ -59,11 +64,17 @@ class MyChoresFragment : Fragment() {
             adapter.updateItems(items)
         }
 
-        // Fetch data from server
-        myChoresViewModel.fetchLineItems()
-        testImageUpload()
+        // Fetch line items for a specific group (e.g., "6CL3twvvJP0AoNvPMVoT")
+        val groupId = "6CL3twvvJP0AoNvPMVoT"
+        myChoresViewModel.fetchLineItemsForGroup(groupId)
 
-        // Set up swipe-to-remove functionality
+        // Swipe-to-remove setup
+        setupSwipeToRemove()
+
+        return binding.root
+    }
+
+    private fun setupSwipeToRemove() {
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,

@@ -1,7 +1,6 @@
 package com.example.chorequest.service.server
 
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONObject
 import java.io.IOException
 
@@ -22,14 +21,9 @@ class OpenStackService {
 
             override fun onResponse(call: Call, response: Response) {
                 try {
-                    // Ensure that the response body is not null
-                    if (response.isSuccessful && response.body != null) {
-                        val responseBody = response.body?.string()
-                        if (responseBody != null) {
-                            callback(responseBody)
-                        } else {
-                            callback(null)
-                        }
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()?.string()
+                        callback(responseBody)
                     } else {
                         callback(null)
                     }
@@ -37,7 +31,7 @@ class OpenStackService {
                     e.printStackTrace()
                     callback(null)
                 } finally {
-                    response.close()
+                    response.body()?.close()
                 }
             }
         })
@@ -45,12 +39,10 @@ class OpenStackService {
 
     // Save data by ID
     fun saveDataById(id: String, user: JSONObject, callback: (Boolean) -> Unit) {
-        val requestBody = RequestBody.create(
-            "application/json; charset=utf-8".toMediaTypeOrNull(),
-            user.toString()
-        )
+        val mediaType = MediaType.parse("application/json; charset=utf-8")
+        val requestBody = RequestBody.create(mediaType, user.toString())
         val request = Request.Builder()
-            .url("$baseUrl/$id")  // Updated URL to match the Python server
+            .url("$baseUrl/$id")
             .post(requestBody)
             .build()
 
