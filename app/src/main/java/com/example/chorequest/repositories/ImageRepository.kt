@@ -37,10 +37,6 @@ class ImageRepository {
             body = compressedRequestBody
         )
 
-        // Upload the compressed image
         return imageApiService.uploadImage(compressedPart)
     }
-
-
-
 }
