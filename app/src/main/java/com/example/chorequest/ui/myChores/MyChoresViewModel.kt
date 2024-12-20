@@ -28,8 +28,7 @@ class MyChoresViewModel(
             _lineItems.postValue(items ?: emptyList())
         }
     }
-}
-
+    
     fun uploadImage(imagePart: MultipartBody.Part) {
         viewModelScope.launch {
             try {

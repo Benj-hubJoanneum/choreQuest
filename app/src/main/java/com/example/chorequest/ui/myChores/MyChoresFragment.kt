@@ -17,12 +17,15 @@ import com.example.chorequest.ui.dialog.LineItemsListDialogFragment
 import com.example.chorequest.databinding.FragmentMychoresBinding
 import com.example.chorequest.repositories.ImageRepository
 import com.example.chorequest.repositories.LineItemRepository
-import com.example.chorequest.ui.adapter.LineItemAdapter
 import com.example.chorequest.service.FireStoreService
+import com.example.chorequest.ui.adapter.LineItemAdapter
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
 import java.io.FileOutputStream
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
+
+
 
 class MyChoresFragment : Fragment() {
 
@@ -39,13 +42,13 @@ class MyChoresFragment : Fragment() {
     ): View {
         _binding = FragmentMychoresBinding.inflate(inflater, container, false)
 
-        // Initialize ViewModel
-        val imageRepository = ImageRepository()
+        // Initialize ViewModel with FireStoreService
         val fireStoreService = FireStoreService()
         val repository = LineItemRepository(fireStoreService)
+        val imageRepository = ImageRepository()
         myChoresViewModel = ViewModelProvider(
             this,
-            MyChoresViewModelFactory(repository)
+            MyChoresViewModelFactory(repository, imageRepository)
         )[MyChoresViewModel::class.java]
 
         // Set up RecyclerView
@@ -71,6 +74,8 @@ class MyChoresFragment : Fragment() {
         // Swipe-to-remove setup
         setupSwipeToRemove()
 
+        testImageUpload()
+
         return binding.root
     }
 
@@ -88,14 +93,10 @@ class MyChoresFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 adapter.removeItem(position)
 
-                // Show Snackbar with Undo option
                 Snackbar.make(binding.recyclerView, "Item removed", Snackbar.LENGTH_LONG).show()
             }
-
         })
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-
-        return binding.root
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     private fun testImageUpload() {
@@ -110,7 +111,8 @@ class MyChoresFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         outputStream.close()
 
-        val requestBody = okhttp3.RequestBody.create("image/png".toMediaTypeOrNull(), file)
+        val mediaType = "image/png".toMediaTypeOrNull()
+        val requestBody = file.asRequestBody(mediaType)
         val imagePart = okhttp3.MultipartBody.Part.createFormData("image", file.name, requestBody)
 
         myChoresViewModel.uploadImage(imagePart)

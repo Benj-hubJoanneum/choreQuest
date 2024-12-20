@@ -1,6 +1,7 @@
 package com.example.chorequest.service.server
 
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONObject
 import java.io.IOException
 
@@ -20,18 +21,13 @@ class OpenStackService {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                try {
+                response.use { // Ensure the response is closed automatically
                     if (response.isSuccessful) {
-                        val responseBody = response.body()?.string()
+                        val responseBody = response.body?.string()
                         callback(responseBody)
                     } else {
                         callback(null)
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    callback(null)
-                } finally {
-                    response.body()?.close()
                 }
             }
         })
@@ -39,7 +35,7 @@ class OpenStackService {
 
     // Save data by ID
     fun saveDataById(id: String, user: JSONObject, callback: (Boolean) -> Unit) {
-        val mediaType = MediaType.parse("application/json; charset=utf-8")
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
         val requestBody = RequestBody.create(mediaType, user.toString())
         val request = Request.Builder()
             .url("$baseUrl/$id")
