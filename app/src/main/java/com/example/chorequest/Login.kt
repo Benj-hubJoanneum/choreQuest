@@ -79,16 +79,11 @@ class Login : AppCompatActivity() {
                     Toast.makeText(this, "Sign-in successful", Toast.LENGTH_SHORT).show()
                     navigateToMainActivity()
                 } else {
-
-                    // currently to avoid bugs
-                    navigateToMainActivity()
-
-
-                   /* Toast.makeText(
+                    Toast.makeText(
                         this,
                         "Sign-in failed: ${task.exception?.message}",
                         Toast.LENGTH_SHORT
-                    ).show()*/
+                    ).show()
                 }
             }
     }
