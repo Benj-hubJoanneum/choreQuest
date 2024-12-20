@@ -23,8 +23,8 @@ class LineItemRepository(private val fireStoreService: FireStoreService) {
     suspend fun getHistoryByLineItemID(lineItemID: String): List<LineItem>? {
         return try {
             val lineItem = fireStoreService.getLineItemByID(lineItemID)
-            lineItem?.lineItems?.mapNotNull { lineItemID ->
-                fireStoreService.getLineItemByID(lineItemID)?.let { lineItem ->
+            lineItem?.lineItems?.mapNotNull { it ->
+                fireStoreService.getLineItemByID(it)?.let { lineItem ->
                     // Replace assignee UUID with user name
                     val userName = fireStoreService.getUsersByID(lineItem.assignee)?.name ?: "Unknown"
                     lineItem.copy(assignee = userName)
