@@ -20,6 +20,7 @@ firebaseMessaging = "24.1.0"
 okhttp = "4.11.0"
 retrofit2 = "2.11.0"
 glide = "4.16.0"
+firebaseAuth = "23.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +42,7 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit2" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
