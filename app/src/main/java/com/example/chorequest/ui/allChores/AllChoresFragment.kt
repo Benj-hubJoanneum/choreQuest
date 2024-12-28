@@ -23,7 +23,7 @@ class AllChoresFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val allChoresViewModel =
-            ViewModelProvider(this).get(AllChoresViewModel::class.java)
+            ViewModelProvider(this)[AllChoresViewModel::class.java]
 
         _binding = FragmentAllchoresBinding.inflate(inflater, container, false)
         val root: View = binding.root

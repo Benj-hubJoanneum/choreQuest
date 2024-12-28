@@ -4,7 +4,7 @@
     <string name="date">Date</string>
     <string name="assignee">Assignee</string>
     <string name="chore_display">chore display</string>
-    <string name="TODO_list">TODO list</string>
+    <string name="TODO_list">TODO</string>
     <string name="ADD">Add</string>
     <string name="ALL_chores">All Chores</string>
     <string name="chore_quest">Chore Quest</string>
