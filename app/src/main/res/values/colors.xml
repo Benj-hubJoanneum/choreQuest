@@ -10,4 +10,25 @@
 
     <color name="light_blue01">#2C7DA0</color>
 
+
+    <!-- New Theme Colors -->
+    <color name="colorPrimary">#9146FF</color> <!-- Twitch's purple -->
+    <color name="colorPrimaryVariant">#772CE8</color> <!-- Darker purple for variants -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- White for text/icons on primary -->
+
+    <color name="colorSecondary">#6441A4</color> <!-- Twitch's secondary purple -->
+    <color name="colorSecondaryVariant">#4B3580</color> <!-- Slightly darker for variants -->
+    <color name="colorOnSecondary">#FFFFFF</color> <!-- White for text/icons on secondary -->
+
+    <color name="colorBackground">#0E0E10</color> <!-- Twitch's dark background -->
+    <color name="colorSurface">#18181B</color> <!-- Slightly lighter background for surfaces -->
+    <color name="colorOnBackground">#E5E5E5</color> <!-- Light gray for text on background -->
+    <color name="colorOnSurface">#E5E5E5</color> <!-- Same for surfaces -->
+
+    <color name="colorError">#E91916</color> <!-- Bright red for errors -->
+    <color name="colorOnError">#FFFFFF</color> <!-- White for text/icons on errors -->
+
+    <color name="statusBarColor">@color/colorPrimaryVariant</color> <!-- Matches primary variant -->
+    <color name="navigationBarColor">#0E0E10</color> <!-- Matches background -->
+
 </resources>

@@ -1,35 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="?attr/colorPrimaryVariant">
+    android:background="?android:attr/colorBackground"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/emailEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        <!-- App Logo or Icon -->
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/placeholder"
+            android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/signInButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sign In" />
+        <!-- Email Input Field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="E-mail"
+            android:layout_marginBottom="16dp">
 
-    <Button
-        android:id="@+id/signUpButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sign Up" />
-</LinearLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnBackground" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Password Input Field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnBackground" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Sign In Button -->
+        <Button
+            android:id="@+id/signInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/signUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:backgroundTint="?attr/colorSecondary"
+            android:textColor="?attr/colorOnSecondary" />
+    </LinearLayout>
+</ScrollView>
