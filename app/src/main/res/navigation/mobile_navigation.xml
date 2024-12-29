@@ -22,4 +22,11 @@
         android:name="com.example.chorequest.ui.allChores.AllChoresFragment"
         android:label="All Chores"
         tools:layout="@layout/fragment_allchores" />
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.chorequest.ui.cameraX.CameraFragment"
+        android:label="Camera"
+        tools:layout="@layout/fragment_camera" />
+
 </navigation>

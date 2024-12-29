@@ -15,8 +15,8 @@
         <!-- App Logo or Icon -->
         <ImageView
             android:id="@+id/appLogo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@drawable/placeholder"
             android:layout_marginBottom="24dp" />
 

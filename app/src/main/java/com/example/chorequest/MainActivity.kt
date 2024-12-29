@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val fireStoreService = FireStoreService()
     private val serverService = OpenStackService()
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,33 +40,53 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        setupNavigation()
+        displayWelcomeMessage()
+    }
+
+    private fun setupNavigation() {
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val bundle = Bundle().apply {
-            putString("GROUP_ID", "6CL3twvvJP0AoNvPMVoT") // Replace with actual group ID
-        }
+        navController = findNavController(R.id.nav_host_fragment_activity_main)
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_mychores, R.id.navigation_add, R.id.navigation_all
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         supportActionBar?.hide()
 
+        // Clear back stack when switching navigation
+        navView.setOnItemSelectedListener { item ->
+            navController.popBackStack(R.id.nav_host_fragment_activity_main, true)
+            when (item.itemId) {
+                R.id.navigation_mychores -> {
+                    navController.navigate(R.id.navigation_mychores)
+                    true
+                }
+                R.id.navigation_add -> {
+                    navController.navigate(R.id.navigation_add)
+                    true
+                }
+                R.id.navigation_all -> {
+                    navController.navigate(R.id.navigation_all)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun displayWelcomeMessage() {
         Toast.makeText(
             this,
             "Welcome, ${firebaseAuth.currentUser?.email}",
             Toast.LENGTH_SHORT
         ).show()
-
-        // Fetch data from Firestore
-        // fetchDataFromFirestore()
-
-        // Fetch data from the Python server
-        // fetchDataFromServer()
     }
 
     private fun navigateToLoginActivity() {
