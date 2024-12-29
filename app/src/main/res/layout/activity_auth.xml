@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/colorBackground"
     android:padding="16dp">
 
@@ -13,12 +13,22 @@
         android:gravity="center">
 
         <!-- App Logo or Icon -->
-        <ImageView
-            android:id="@+id/appLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/placeholder"
-            android:layout_marginBottom="24dp" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:cardCornerRadius="40dp"
+            android:layout_margin="20dp"
+            app:cardElevation="4dp">
+
+            <ImageView
+                android:id="@+id/appLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo_with_background"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
 
         <!-- Email Input Field -->
         <com.google.android.material.textfield.TextInputLayout
@@ -69,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign Up"
-            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTint="?attr/colorPrimary"
             android:textColor="?attr/colorOnSecondary" />
     </LinearLayout>
 </ScrollView>
