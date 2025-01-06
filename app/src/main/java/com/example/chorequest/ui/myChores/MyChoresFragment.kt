@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chorequest.R
 import com.example.chorequest.ui.dialog.LineItemsListDialogFragment
 import com.example.chorequest.databinding.FragmentMychoresBinding
 import com.example.chorequest.repositories.ImageRepository
@@ -69,7 +70,9 @@ class MyChoresFragment : Fragment() {
 
         // Fetch line items for a specific group (e.g., "6CL3twvvJP0AoNvPMVoT")
         val groupId = "6CL3twvvJP0AoNvPMVoT"
-        myChoresViewModel.fetchLineItemsForGroup(groupId)
+        // Filter line items for a specific assignee (e.g., "Anna")
+        val assignee = "Anna"
+        myChoresViewModel.fetchLineItemsForGroup(groupId, assignee)
 
         // Swipe-to-remove setup
         setupSwipeToRemove()
@@ -91,9 +94,13 @@ class MyChoresFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                adapter.removeItem(position)
 
-                Snackbar.make(binding.recyclerView, "Item removed", Snackbar.LENGTH_LONG).show()
+                // Mark the item as done
+                val swipedItem = adapter.getItem(position)
+                myChoresViewModel.markItemAsDone(swipedItem)
+
+                // Reset swipe state to keep the item in the list
+                adapter.notifyItemChanged(position)
             }
         })
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)

@@ -31,4 +31,6 @@
     <color name="statusBarColor">@color/colorPrimaryVariant</color> <!-- Matches primary variant -->
     <color name="navigationBarColor">#0E0E10</color> <!-- Matches background -->
 
+    <color name="colorGreen">#4CAF50</color> <!-- Matches background -->
+
 </resources>

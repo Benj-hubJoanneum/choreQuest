@@ -1,6 +1,5 @@
 package com.example.chorequest.ui.myChores
 
-import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,11 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.chorequest.model.LineItem
 import com.example.chorequest.repositories.ImageRepository
 import com.example.chorequest.repositories.LineItemRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import retrofit2.Response
 
 class MyChoresViewModel(
     private val repository: LineItemRepository,
@@ -22,10 +18,28 @@ class MyChoresViewModel(
     private val _lineItems = MutableLiveData<List<LineItem>>()
     val lineItems: LiveData<List<LineItem>> get() = _lineItems
 
-    fun fetchLineItemsForGroup(groupId: String) {
+    fun fetchLineItemsForGroup(groupId: String, assignee: String? = null) {
         viewModelScope.launch {
             val items = repository.getLineItemsForGroup(groupId)
-            _lineItems.postValue(items ?: emptyList())
+
+            if (items?.isNotEmpty() == true && assignee != null){
+                _lineItems.postValue(items.filter { it.assignee == assignee } ?: emptyList())
+            } else {
+                _lineItems.postValue(items ?: emptyList())
+            }
+        }
+    }
+
+    fun markItemAsDone(lineItem: LineItem) {
+        viewModelScope.launch {
+            // Update Firestore with the new status
+            repository.updateLineItemStatus(lineItem.copy(isDone = true))
+
+            // Update the LiveData list
+            val updatedList = _lineItems.value?.map {
+                if (it.uuid == lineItem.uuid) it.copy(isDone = true) else it
+            }
+            _lineItems.postValue(updatedList ?: emptyList())
         }
     }
     

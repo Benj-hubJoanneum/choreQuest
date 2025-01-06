@@ -42,6 +42,10 @@ class LineItemAdapter(
         }
     }
 
+    fun getItem(position: Int): LineItem {
+        return items[position]
+    }
+
     override fun getItemCount() = items.size
 
     @SuppressLint("NotifyDataSetChanged")

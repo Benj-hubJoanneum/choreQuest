@@ -34,11 +34,11 @@ class MainActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        if (firebaseAuth.currentUser == null) {
+        /*if (firebaseAuth.currentUser == null) {
             // Redirect to Login activity if the user is not authenticated
             navigateToLoginActivity()
             return
-        }
+        }*/
 
         setupNavigation()
         displayWelcomeMessage()

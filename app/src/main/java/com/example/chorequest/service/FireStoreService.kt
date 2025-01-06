@@ -72,7 +72,7 @@ class FireStoreService {
     suspend fun getGroupByID(groupId: String): Group? {
         return try {
             // Fetch by document ID
-            db.collection("groups").document(groupId).get().await().toObject(Group::class.java)
+            db.collection("groups").document(groupId).get(Source.SERVER).await().toObject(Group::class.java)
         } catch (e: Exception) {
             Log.w(TAG, "Error getting group by ID: $groupId", e)
             null
@@ -88,12 +88,32 @@ class FireStoreService {
         }
     }
 
+    suspend fun updateLineItemStatus(lineItemId: String, isDone: Boolean) {
+        try {
+            db.collection("lineItems").document(lineItemId)
+                .update("isDone", isDone)
+                .await()
+            Log.d(TAG, "LineItem $lineItemId status updated to $isDone.")
+        } catch (e: Exception) {
+            Log.w(TAG, "Error updating LineItem status for $lineItemId", e)
+        }
+    }
 
     suspend fun getLineItemByID(lineItemId: String): LineItem? {
         return try {
-            // Fetch by document ID
-            db.collection("lineItems").document(lineItemId).get().await().toObject(LineItem::class.java)
-        } catch (e: Exception) {
+            val document =
+                db.collection("lineItems").document(lineItemId).get(Source.SERVER).await()
+            document.data?.let {
+                LineItem(
+                    uuid = it["uuid"] as? String ?: "",
+                    isDone = it["isDone"] as? Boolean ?: false,
+                    title = it["title"] as? String ?: "",
+                    date = it["date"] as? String ?: "",
+                    assignee = it["assignee"] as? String ?: "",
+                    lineItems = (it["lineItems"] as? List<*>)?.filterIsInstance<String>()
+                        ?: listOf(),
+                )
+            }} catch (e: Exception) {
             Log.w(TAG, "Error getting line item by ID: $lineItemId", e)
             null
         }
