@@ -1,9 +1,12 @@
 package com.example.chorequest.repositories
+import android.graphics.Bitmap
 import com.example.chorequest.service.server.RetrofitServiceBuilder
 import com.example.chorequest.service.server.interfaces.ImageApiService
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 
 class ImageRepository {
 
@@ -39,4 +42,15 @@ class ImageRepository {
 
         return imageApiService.uploadImage(compressedPart)
     }
+
+    fun prepareImagePart(bitmap: Bitmap): MultipartBody.Part {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+
+        val requestBody = byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull())
+
+        return MultipartBody.Part.createFormData("image", "image.jpg", requestBody)
+    }
+
 }

@@ -43,5 +43,5 @@ Java_com_example_chorequest_repositories_ImageRepository_compressImageNative(JNI
     (*env).ReleaseByteArrayElements(input_image, inputBytes, 0);
 
     // Return the compressed image byte array
-    return compressedImage;
+    return input_image;
 }

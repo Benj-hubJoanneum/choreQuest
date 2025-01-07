@@ -19,6 +19,7 @@ import com.example.chorequest.repositories.LineItemRepository
 import com.example.chorequest.service.FireStoreService
 import com.example.chorequest.ui.adapter.LineItemAdapter
 import com.example.chorequest.ui.dialog.LineItemsListDialogFragment
+import com.example.chorequest.ui.modelFactory.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -47,7 +48,7 @@ class AllChoresFragment : Fragment() {
         val imageRepository = ImageRepository()
         allChoresViewModel = ViewModelProvider(
             this,
-            AllChoresViewModelFactory(repository, imageRepository)
+            ViewModelFactory(repository, imageRepository)
         )[AllChoresViewModel::class.java]
 
         // Set up RecyclerView

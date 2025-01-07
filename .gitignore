@@ -31,3 +31,6 @@ render.experimental.xml
 
 # Android Profiling
 *.hprof
+
+# Server Uploads
+server/upload/

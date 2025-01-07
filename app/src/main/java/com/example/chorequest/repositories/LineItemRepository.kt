@@ -45,4 +45,11 @@ class LineItemRepository(private val fireStoreService: FireStoreService) {
         }
     }
 
+    suspend fun addLineItem(lineItem: LineItem, groupID: String) {
+        try {
+            fireStoreService.addLineItem(lineItem, groupID)
+        } catch (e: Exception) {
+            throw e
+        }
+    }
 }

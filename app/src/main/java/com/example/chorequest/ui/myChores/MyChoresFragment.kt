@@ -20,6 +20,7 @@ import com.example.chorequest.repositories.ImageRepository
 import com.example.chorequest.repositories.LineItemRepository
 import com.example.chorequest.service.FireStoreService
 import com.example.chorequest.ui.adapter.LineItemAdapter
+import com.example.chorequest.ui.modelFactory.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream
@@ -49,7 +50,7 @@ class MyChoresFragment : Fragment() {
         val imageRepository = ImageRepository()
         myChoresViewModel = ViewModelProvider(
             this,
-            MyChoresViewModelFactory(repository, imageRepository)
+            ViewModelFactory(repository, imageRepository)
         )[MyChoresViewModel::class.java]
 
         // Set up RecyclerView

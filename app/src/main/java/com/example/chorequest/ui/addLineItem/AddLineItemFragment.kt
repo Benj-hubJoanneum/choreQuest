@@ -8,12 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.chorequest.R
 import com.example.chorequest.databinding.FragmentAddlineitemBinding
 import com.example.chorequest.model.Constant
+import com.example.chorequest.repositories.ImageRepository
+import com.example.chorequest.repositories.LineItemRepository
+import com.example.chorequest.service.FireStoreService
+import com.example.chorequest.ui.allChores.AllChoresViewModel
+import com.example.chorequest.ui.modelFactory.ViewModelFactory
 
 class AddLineItemDialogFragment : Fragment() {
 
@@ -29,6 +35,14 @@ class AddLineItemDialogFragment : Fragment() {
     ): View {
         _binding = FragmentAddlineitemBinding.inflate(inflater, container, false)
 
+        val fireStoreService = FireStoreService()
+        val repository = LineItemRepository(fireStoreService)
+        val imageRepository = ImageRepository()
+        addLineItemViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(repository, imageRepository)
+        )[AddLineItemViewModel::class.java]
+
         parentFragmentManager.setFragmentResultListener(Constant.CAMERA_RESULT, this) { _, bundle ->
             val imageUri = bundle.getString(Constant.IMAGE_URI)
             if (imageUri != null) {
@@ -41,8 +55,6 @@ class AddLineItemDialogFragment : Fragment() {
     }
 
     private fun initializeUI() {
-        addLineItemViewModel = ViewModelProvider(this)[AddLineItemViewModel::class.java]
-
         binding.textDate.setOnClickListener { showDatePickerDialog() }
 
         binding.imageItem.setOnClickListener {
@@ -53,9 +65,10 @@ class AddLineItemDialogFragment : Fragment() {
             val title = binding.textTitle.text.toString()
             val date = binding.textDate.text.toString()
             val assignee = binding.textAssignee.text.toString()
+            val image = binding.imageItem.drawToBitmap()
 
             if (validateInputs(title, date, assignee)) {
-                addLineItemViewModel.addLineItem(title, date, assignee)
+                addLineItemViewModel.addLineItem(title, date, assignee, "", image)
                 showToast("Item added successfully!")
             } else {
                 showToast("Please fill all fields")
