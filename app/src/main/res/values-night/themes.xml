@@ -24,5 +24,9 @@
         <!-- Status Bar and Navigation -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
+
+        <!-- Text -->
+        <item name="android:textColorPrimary">@color/colorOnPrimary</item>
+        <item name="android:textColorSecondary">@color/colorOnSecondary</item>
     </style>
 </resources>
