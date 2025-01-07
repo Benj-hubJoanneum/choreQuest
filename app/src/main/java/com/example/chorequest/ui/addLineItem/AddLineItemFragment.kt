@@ -68,7 +68,7 @@ class AddLineItemDialogFragment : Fragment() {
             val image = binding.imageItem.drawToBitmap()
 
             if (validateInputs(title, date, assignee)) {
-                addLineItemViewModel.addLineItem(title, date, assignee, "", image)
+                addLineItemViewModel.addLineItem(title, date, assignee, "6CL3twvvJP0AoNvPMVoT", image)
                 showToast("Item added successfully!")
             } else {
                 showToast("Please fill all fields")
