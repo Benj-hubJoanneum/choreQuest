@@ -23,20 +23,19 @@ class AddLineItemViewModel(
     fun addLineItem(title: String, date: String, assignee: String, groupID: String, image: Bitmap) {
         viewModelScope.launch {
             try {
-                val imagePart = imageRepository.prepareImagePart(image)
+                val imageName = "$6CL3twvvJP0AoNvPMVoT_$date.jpg".replace(" ", "_") // Replace spaces with underscores
+                val imagePart = imageRepository.prepareImagePart(image, imageName)
 
                 val response = imageRepository.uploadImage(imagePart)
                 if (response.isSuccessful) {
-                    val uploadedImageUrl = response.headers()["Location"] ?: "Default URL"
-
                     val lineItem = LineItem(
                         title = title,
                         date = date,
                         assignee = assignee,
-                        imageUrl = uploadedImageUrl
+                        imageUrl = imageRepository.buildImageUri(imageName)
                     )
 
-                    repository.addLineItem(lineItem, groupID)
+                    repository.addLineItem(lineItem, "6CL3twvvJP0AoNvPMVoT")
 
                     _addLineItemResult.value = Result.success("LineItem added successfully!")
                 } else {

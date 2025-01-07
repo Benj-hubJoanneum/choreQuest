@@ -7,9 +7,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object  RetrofitServiceBuilder {
-    //private const val BASE_URL = "http://10.77.17.158:12345"
-    private const val BASE_URL = "http://10.0.2.2:5000/"
-
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -17,7 +14,7 @@ object  RetrofitServiceBuilder {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(Constants.BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
