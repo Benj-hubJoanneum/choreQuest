@@ -57,8 +57,10 @@ class FireStoreService {
             Log.d(TAG, "Line item added with ID: ${documentReference.id}")
         } catch (e: Exception) {
             Log.w(TAG, "Error adding line item", e)
+            throw e
         }
     }
+
 
     suspend fun getUsers(): List<User> {
         return try {

@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
@@ -18,10 +20,9 @@ import com.example.chorequest.model.Constant
 import com.example.chorequest.repositories.ImageRepository
 import com.example.chorequest.repositories.LineItemRepository
 import com.example.chorequest.service.FireStoreService
-import com.example.chorequest.ui.allChores.AllChoresViewModel
 import com.example.chorequest.ui.modelFactory.ViewModelFactory
 
-class AddLineItemDialogFragment : Fragment() {
+class AddLineItemFragment : Fragment() {
 
     private var _binding: FragmentAddlineitemBinding? = null
     private val binding get() = _binding!!
@@ -57,6 +58,8 @@ class AddLineItemDialogFragment : Fragment() {
     private fun initializeUI() {
         binding.textDate.setOnClickListener { showDatePickerDialog() }
 
+        fetchAssigneeOptions()
+
         binding.imageItem.setOnClickListener {
             findNavController().navigate(R.id.cameraFragment)
         }
@@ -64,11 +67,11 @@ class AddLineItemDialogFragment : Fragment() {
         binding.signInButton.setOnClickListener {
             val title = binding.textTitle.text.toString()
             val date = binding.textDate.text.toString()
-            val assignee = binding.textAssignee.text.toString()
+            val assigneeId = selectedAssigneeId
             val image = binding.imageItem.drawToBitmap()
 
-            if (validateInputs(title, date, assignee)) {
-                addLineItemViewModel.addLineItem(title, date, assignee, "6CL3twvvJP0AoNvPMVoT", image)
+            if (validateInputs(title, date, assigneeId)) {
+                addLineItemViewModel.addLineItem(title, date, assigneeId!!, "6CL3twvvJP0AoNvPMVoT", image)
                 showToast("Item added successfully!")
             } else {
                 showToast("Please fill all fields")
@@ -76,9 +79,38 @@ class AddLineItemDialogFragment : Fragment() {
         }
     }
 
-    private fun validateInputs(title: String, date: String, assignee: String): Boolean {
-        return title.isNotBlank() && date.isNotBlank() && assignee.isNotBlank()
+    private var selectedAssigneeId: String? = null
+    private fun fetchAssigneeOptions() {
+        addLineItemViewModel.fetchGroupUsers("6CL3twvvJP0AoNvPMVoT") { userMap ->
+            val names = userMap.values.toList()
+            val ids = userMap.keys.toList()
+
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.spinner_item,
+                names
+            )
+            adapter.setDropDownViewResource(R.layout.spinner_item) // Custom layout for the dropdown
+            binding.spinnerAssignee.adapter = adapter
+
+            // Save the selected user ID when the spinner value changes
+            binding.spinnerAssignee.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    selectedAssigneeId = ids[position] // Get the corresponding user ID
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectedAssigneeId = null // Clear the selection
+                }
+            }
+        }
     }
+
+
+    private fun validateInputs(title: String, date: String, assigneeId: String?): Boolean {
+        return title.isNotBlank() && date.isNotBlank()
+    }
+
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -95,6 +127,18 @@ class AddLineItemDialogFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun observeViewModel() {
+        addLineItemViewModel.addLineItemResult.observe(viewLifecycleOwner) { result ->
+            result.onSuccess {
+                showToast(it)
+                findNavController().popBackStack()
+            }
+            result.onFailure {
+                showToast("Failed to add item: ${it.message}")
+            }
+        }
     }
 
     override fun onDestroyView() {

@@ -1,34 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.addLineItem.AddLineItemDialogFragment">
+    android:background="?android:attr/colorBackground"
+    android:layout_margin="50dp">
 
-    <ImageView
-        android:id="@+id/image_item"
-        android:layout_width="0dp"
-        android:layout_height="400dp"
-        android:layout_margin="16dp"
-        android:contentDescription="Item Image"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/placeholder"/>
-
-    <!-- Item Details Container -->
     <LinearLayout
-        android:id="@+id/item_details_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/image_item"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:gravity="center">
+
+        <!-- App Logo or Icon -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:cardCornerRadius="40dp"
+            android:layout_margin="20dp"
+            app:cardElevation="4dp">
+
+            <ImageView
+                android:id="@+id/image_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo_with_background"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
 
         <!-- Title -->
         <com.google.android.material.textfield.TextInputLayout
@@ -64,22 +63,14 @@
                 android:textColorHint="?attr/colorOnBackground" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <!-- Assignee -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Assignee Dropdown -->
+        <Spinner
+            android:id="@+id/spinner_assignee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Assignee"
-            android:layout_marginBottom="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_assignee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textColor="?attr/colorOnBackground"
-                android:textColorHint="?attr/colorOnBackground" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="55sp"
+            android:layout_marginBottom="16dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textColorHint="?attr/colorOnBackground" />
 
         <Button
             android:id="@+id/signInButton"
@@ -91,4 +82,4 @@
             android:layout_marginBottom="16dp" />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
