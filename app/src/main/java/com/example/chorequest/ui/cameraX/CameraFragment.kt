@@ -1,5 +1,6 @@
 package com.example.chorequest.ui.cameraX
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +13,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -75,11 +75,15 @@ class CameraFragment : Fragment() {
     private fun initializeCamera() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
+
         startCamera()
 
         binding.captureButton.setOnClickListener {
             takePicture()
         }
+
+        val serviceIntent = Intent(requireContext(), CameraService::class.java)
+        ContextCompat.startForegroundService(requireContext(), serviceIntent)
     }
 
     private fun startCamera() {
