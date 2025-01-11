@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.chorequest.model.Group
 import com.example.chorequest.model.LineItem
 import com.example.chorequest.model.User
+import com.example.chorequest.repositories.ImageRepository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue  // Add this import
 import com.google.firebase.firestore.Source
@@ -100,6 +101,8 @@ class FireStoreService {
     }
 
     suspend fun getLineItemByID(lineItemId: String): LineItem? {
+        var imageRepository = ImageRepository();
+
         return try {
             val document =
                 db.collection("lineItems").document(lineItemId).get(Source.SERVER).await()
@@ -110,6 +113,7 @@ class FireStoreService {
                     title = it["title"] as? String ?: "",
                     date = it["date"] as? String ?: "",
                     assignee = it["assignee"] as? String ?: "",
+                    imageUrl = imageRepository.buildImageUri(it["imageUrl"] as? String ?: ""),
                     lineItems = (it["lineItems"] as? List<*>)?.filterIsInstance<String>()
                         ?: listOf(),
                 )

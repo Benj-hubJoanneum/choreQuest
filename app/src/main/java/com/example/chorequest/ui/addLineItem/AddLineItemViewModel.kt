@@ -31,7 +31,7 @@ class AddLineItemViewModel(
 
                 val response = imageRepository.uploadImage(imagePart)
                 if (response.isSuccessful) {
-                    val imageUrl = imageRepository.buildImageUri(imageName)
+                    val imageUrl = imageName
                     val lineItem = LineItem(
                         title = title,
                         date = date,
