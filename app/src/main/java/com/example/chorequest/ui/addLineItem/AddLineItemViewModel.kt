@@ -31,12 +31,11 @@ class AddLineItemViewModel(
 
                 val response = imageRepository.uploadImage(imagePart)
                 if (response.isSuccessful) {
-                    val imageUrl = imageName
                     val lineItem = LineItem(
                         title = title,
                         date = date,
                         assignee = assignee,
-                        imageUrl = imageUrl
+                        imageUrl = imageName
                     )
 
                     repository.addLineItem(lineItem, groupID)

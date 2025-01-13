@@ -7,9 +7,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
 import com.example.chorequest.MainActivity
 import com.example.chorequest.R
+import com.example.chorequest.model.User
+import com.example.chorequest.repositories.LineItemRepository
+import com.example.chorequest.service.FireStoreService
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.UUID
 
 class Login : AppCompatActivity() {
 
@@ -95,6 +104,16 @@ class Login : AppCompatActivity() {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    val repository = LineItemRepository(FireStoreService())
+                    runBlocking {
+                        val user = User(
+                            password = password,
+                            email = email,
+                            name = email,
+                            uuid = UUID.randomUUID().toString()
+                        )
+                        repository.addUser(user)
+                    }
                     Toast.makeText(this, "Sign-up successful", Toast.LENGTH_SHORT).show()
                     navigateToMainActivity()
                 } else {

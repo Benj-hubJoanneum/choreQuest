@@ -8,4 +8,8 @@ interface ImageApiService {
     @Multipart
     @POST("images/upload")
     suspend fun uploadImage(@Part image: MultipartBody.Part): Response<Void>
+
+    @Multipart
+    @POST("files/upload")
+    suspend fun uploadFile(@Part filePart: MultipartBody.Part): Response<Void>
 }

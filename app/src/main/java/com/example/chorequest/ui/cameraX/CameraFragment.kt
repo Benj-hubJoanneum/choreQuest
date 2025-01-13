@@ -50,6 +50,10 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
+
+        val serviceIntent = Intent(requireContext(), CameraService::class.java)
+        requireContext().stopService(serviceIntent)
+
         checkAndRequestPermission()
         return binding.root
     }
@@ -81,9 +85,6 @@ class CameraFragment : Fragment() {
         binding.captureButton.setOnClickListener {
             takePicture()
         }
-
-        val serviceIntent = Intent(requireContext(), CameraService::class.java)
-        ContextCompat.startForegroundService(requireContext(), serviceIntent)
     }
 
     private fun startCamera() {
@@ -165,5 +166,8 @@ class CameraFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         cameraExecutor.shutdown()
+
+        val serviceIntent = Intent(requireContext(), CameraService::class.java)
+        ContextCompat.startForegroundService(requireContext(), serviceIntent)
     }
 }

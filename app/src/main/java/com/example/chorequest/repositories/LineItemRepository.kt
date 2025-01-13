@@ -1,6 +1,7 @@
 package com.example.chorequest.repositories
 
 import com.example.chorequest.model.LineItem
+import com.example.chorequest.model.User
 import com.example.chorequest.service.FireStoreService
 
 class LineItemRepository(private val fireStoreService: FireStoreService) {
@@ -50,6 +51,14 @@ class LineItemRepository(private val fireStoreService: FireStoreService) {
             fireStoreService.addLineItem(lineItem, groupID)
         } catch (e: Exception) {
             throw e
+        }
+    }
+
+    suspend fun addUser(user: User) {
+        try {
+            fireStoreService.addUser(user)
+        } catch (e: Exception) {
+            throw  e
         }
     }
 }

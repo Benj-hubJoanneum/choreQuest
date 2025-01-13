@@ -6,9 +6,11 @@ import com.example.chorequest.service.server.RetrofitServiceBuilder
 import com.example.chorequest.service.server.interfaces.ImageApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 class ImageRepository {
 
@@ -65,5 +67,15 @@ class ImageRepository {
         val outputStream = ByteArrayOutputStream()
         this.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         return outputStream.toByteArray()
+    }
+
+    suspend fun inviteFriends(filePart: MultipartBody.Part): Response<Void> {
+        return imageApiService.uploadFile(filePart)
+    }
+
+    fun collectFriendData(file: File): MultipartBody.Part {
+        val requestBody = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+
+        return MultipartBody.Part.createFormData("file", file.name, requestBody)
     }
 }
